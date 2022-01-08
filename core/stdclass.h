@@ -244,6 +244,7 @@ void add_system_data_dir(const std::string& dir);
 
 //subpath format: /data/fsca-table.bit
 std::string get_writable_data_path(const std::string& filename);
+std::string get_writable_data_save(const std::string& filename);
 std::string get_writable_vmu_path(const char *logical_port);
 
 bool mem_region_lock(void *start, std::size_t len);

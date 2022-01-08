@@ -103,7 +103,7 @@ char save_dir[PATH_MAX];
 char eeprom_file[PATH_MAX];
 char nvmem_file[PATH_MAX];
 char nvmem_file2[PATH_MAX];		// AtomisWave
-bool boot_to_bios;
+bool boot_to_bios=true;
 
 static bool devices_need_refresh = false;
 static int device_type[4] = {-1,-1,-1,-1};
@@ -1863,8 +1863,8 @@ bool retro_load_game(const struct retro_game_info *game)
    if (!(environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &dir) && dir))
       dir = game_dir;
 
-   snprintf(game_dir, sizeof(game_dir), "%s%cdc%c", dir, slash, slash);
-   snprintf(game_dir_no_slash, sizeof(game_dir_no_slash), "%s%cdc", dir, slash);
+   snprintf(game_dir, sizeof(game_dir), "%s", dir);
+   snprintf(game_dir_no_slash, sizeof(game_dir_no_slash), "%s", dir);
 
    // Per-content VMU additions START
    // > Get save directory
@@ -1969,7 +1969,7 @@ bool retro_load_game(const struct retro_game_info *game)
    {
       char data_dir[1024];
 
-      snprintf(data_dir, sizeof(data_dir), "%s%s", game_dir, "data");
+      snprintf(data_dir, sizeof(data_dir), "%s", game_dir);
 
       INFO_LOG(COMMON, "Creating dir: %s", data_dir);
       struct stat buf;

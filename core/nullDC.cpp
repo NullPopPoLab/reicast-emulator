@@ -483,7 +483,7 @@ void dc_run()
 
 void dc_term()
 {
-	SaveRomFiles(get_writable_data_path(""));
+	SaveRomFiles(get_writable_data_save(""));
 	sh4_cpu.Term();
 	naomi_cart_Close();
 	plugins_Term();

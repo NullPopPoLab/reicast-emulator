@@ -42,6 +42,17 @@ std::string get_writable_data_path(const std::string& filename)
          + filename);
 }
 
+std::string get_writable_data_save(const std::string& filename)
+{
+   return std::string("/userdata/saves/dreamcast/" +
+#ifdef _WIN32
+         std::string("\\")
+#else
+         std::string("/")
+#endif
+         + filename);
+}
+
 std::string get_writable_vmu_path(const char *logical_port)
 {
    extern char vmu_dir_no_slash[PATH_MAX];
@@ -64,6 +75,6 @@ std::string get_writable_vmu_path(const char *logical_port)
    else
    {
       sprintf(filename, "vmu_save_%s.bin", logical_port);
-      return get_writable_data_path(filename);
+      return std::string("/userdata/saves/dreamcast/") + filename;
    }
 }
