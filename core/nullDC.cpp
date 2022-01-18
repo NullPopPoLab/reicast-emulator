@@ -412,9 +412,9 @@ int dc_init()
    char new_system_dir[1024];
 
 #ifdef _WIN32
-   sprintf(new_system_dir, "%s\\", game_dir_no_slash);
+   sprintf(new_system_dir, "%s\\dreamcast\\", game_dir_no_slash);
 #else
-   sprintf(new_system_dir, "%s/", game_dir_no_slash);
+   sprintf(new_system_dir, "%s/dreamcast/", game_dir_no_slash);
 #endif
 
    if (settings.System == DC_PLATFORM_DREAMCAST)
