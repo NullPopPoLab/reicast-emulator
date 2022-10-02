@@ -19,6 +19,7 @@ option(USE_VULKAN "Build with Vulkan support" ON)
 option(LIBRETRO "Build libretro core" OFF)
 option(USE_OPENGL "Use Open GL API" ON)
 option(USE_VIDEOCORE "RPI: use the legacy Broadcom GLES libraries" OFF)
+option(USE_MALI "Use mali" OFF)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/shell/cmake")
 
@@ -140,6 +141,10 @@ elseif(MSVC)
     add_executable(${PROJECT_NAME} WIN32 core/emulator.cpp)
 else()
     add_executable(${PROJECT_NAME} MACOSX_BUNDLE core/emulator.cpp)
+endif()
+
+if(USE_MALI)
+  target_link_libraries(${PROJECT_NAME} PRIVATE "-lmali")
 endif()
 
 if(WINDOWS_STORE)
