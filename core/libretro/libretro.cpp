@@ -2679,7 +2679,7 @@ static void UpdateInputStateNaomi(u32 port)
 	  break;
 
    default:
-     int16_t ret = 0;
+     int32_t ret = 0;
 	  //
 	  // -- buttons
      {
@@ -2687,7 +2687,7 @@ static void UpdateInputStateNaomi(u32 port)
            ret = input_cb(port, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_MASK);
         else
         {
-           for (id = RETRO_DEVICE_ID_JOYPAD_B; id <= RETRO_DEVICE_ID_JOYPAD_R3; ++id)
+           for (id = RETRO_DEVICE_ID_JOYPAD_B; id <= RETRO_DEVICE_ID_JOYPAD_MENU; ++id)
               if (input_cb(port, RETRO_DEVICE_JOYPAD, 0, id))
                  ret |= (1 << id);
         }
@@ -2830,7 +2830,7 @@ void UpdateInputState(u32 port)
 	  case MDT_SegaController:
 	  {
 		   int id;
-         int16_t ret = 0;
+         int32_t ret = 0;
 		   //
 		   // -- buttons
          
@@ -2838,7 +2838,7 @@ void UpdateInputState(u32 port)
             ret = input_cb(port, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_MASK);
          else
          {
-            for (id = RETRO_DEVICE_ID_JOYPAD_B; id <= RETRO_DEVICE_ID_JOYPAD_R3; ++id)
+            for (id = RETRO_DEVICE_ID_JOYPAD_B; id <= RETRO_DEVICE_ID_JOYPAD_MENU; ++id)
                if (input_cb(port, RETRO_DEVICE_JOYPAD, 0, id))
                   ret |= (1 << id);
          }
@@ -2879,14 +2879,14 @@ void UpdateInputState(u32 port)
 	  
 	case MDT_AsciiStick:
 	{
-      int16_t ret = 0;
+      int32_t ret = 0;
 
       if (libretro_supports_bitmasks)
          ret = input_cb(port, RETRO_DEVICE_ASCIISTICK, 0, RETRO_DEVICE_ID_JOYPAD_MASK);
       else
       {
          unsigned id;
-         for (id = RETRO_DEVICE_ID_JOYPAD_B; id <= RETRO_DEVICE_ID_JOYPAD_R3; ++id)
+         for (id = RETRO_DEVICE_ID_JOYPAD_B; id <= RETRO_DEVICE_ID_JOYPAD_MENU; ++id)
             if (input_cb(port, RETRO_DEVICE_ASCIISTICK, 0, id))
                ret |= (1 << id);
       }
@@ -2939,7 +2939,7 @@ void UpdateInputState(u32 port)
 
 	case MDT_TwinStick:
 	{
-      int16_t ret = 0;
+      int32_t ret = 0;
 
 		kcode[port] = 0xFFFF; // active-low
 
@@ -2962,7 +2962,7 @@ void UpdateInputState(u32 port)
          else
          {
             unsigned id;
-            for (id = RETRO_DEVICE_ID_JOYPAD_B; id <= RETRO_DEVICE_ID_JOYPAD_R3; ++id)
+            for (id = RETRO_DEVICE_ID_JOYPAD_B; id <= RETRO_DEVICE_ID_JOYPAD_MENU; ++id)
                if (input_cb(port, RETRO_DEVICE_TWINSTICK_SATURN, 0, id))
                   ret |= (1 << id);
          }
@@ -2998,7 +2998,7 @@ void UpdateInputState(u32 port)
          else
          {
             unsigned id;
-            for (id = RETRO_DEVICE_ID_JOYPAD_B; id <= RETRO_DEVICE_ID_JOYPAD_R3; ++id)
+            for (id = RETRO_DEVICE_ID_JOYPAD_B; id <= RETRO_DEVICE_ID_JOYPAD_MENU; ++id)
                if (input_cb(port, RETRO_DEVICE_TWINSTICK, 0, id))
                   ret |= (1 << id);
          }
