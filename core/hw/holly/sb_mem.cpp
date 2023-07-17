@@ -239,7 +239,7 @@ void SaveRomFiles(const std::string& root)
    {
       case DC_PLATFORM_DREAMCAST:
       case DC_PLATFORM_DEV_UNIT:
-         sys_nvmem_flash.Save(root, get_rom_prefix(), "nvmem.bin", "nvmem");
+    	 sys_nvmem_flash.Save(nvmem_file);
          break;
       case DC_PLATFORM_ATOMISWAVE:
     	 sys_nvmem_sram.Save(nvmem_file);

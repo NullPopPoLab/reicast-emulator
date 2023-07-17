@@ -118,12 +118,10 @@ struct MemChip
 	}
 	void Save(const std::string& root,const std::string& prefix,const std::string& name_ro,const std::string& title)
 	{
-		char path[512];
+		auto path=root+prefix+name_ro;
+		Save(path.c_str());
 
-		sprintf(path,"%s%s%s",root.c_str(),prefix.c_str(),name_ro.c_str());
-		Save(path);
-
-		INFO_LOG(FLASHROM, "Saved %s as %s", path, title.c_str());
+		INFO_LOG(FLASHROM, "Saved %s as %s", path.c_str(), title.c_str());
 	}
 	virtual void Reset() {}
 	virtual bool Serialize(void **data, unsigned int *total_size) { return true; }

@@ -32,25 +32,14 @@ void add_system_data_dir(const std::string& dir)
 
 std::string get_writable_data_path(const std::string& filename)
 {
-   extern char game_dir_no_slash[1024];
-   return std::string(game_dir_no_slash + 
-#ifdef _WIN32
-         std::string("\\")
-#else
-         std::string("/")
-#endif
-         + filename);
+   extern char content_name[PATH_MAX];
+   return std::string("/userdata/saves/dreamcast/") +content_name+"/"+filename;
 }
 
 std::string get_writable_data_save(const std::string& filename)
 {
-   return std::string("/userdata/saves/dreamcast/" +
-#ifdef _WIN32
-         std::string("\\")
-#else
-         std::string("/")
-#endif
-         + filename);
+   extern char content_name[PATH_MAX];
+   return std::string("/userdata/saves/dreamcast/") +content_name+"/"+filename;
 }
 
 std::string get_writable_vmu_path(const char *logical_port)
@@ -59,22 +48,15 @@ std::string get_writable_vmu_path(const char *logical_port)
    extern char content_name[PATH_MAX];
    extern unsigned per_content_vmus;
    char filename[512];
+   sprintf(filename, "vmu_save_%s.bin", logical_port);
 
    if ((per_content_vmus == 1 && !strcmp("A1", logical_port)) ||
        (per_content_vmus == 2))
    {
-      sprintf(filename, "%s.%s.bin", content_name, logical_port);
-      return std::string(vmu_dir_no_slash +
-#ifdef _WIN32
-         std::string("\\")
-#else
-         std::string("/")
-#endif
-         + filename);
+      return std::string("/userdata/saves/dreamcast/") +content_name+"/"+filename;
    }
    else
    {
-      sprintf(filename, "vmu_save_%s.bin", logical_port);
       return std::string("/userdata/saves/dreamcast/") + filename;
    }
 }
