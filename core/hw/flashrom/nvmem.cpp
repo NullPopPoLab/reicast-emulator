@@ -213,7 +213,7 @@ static bool loadFlash()
 {
 	bool rc = true;
 	if (settings.platform.isConsole())
-		rc = sys_nvmem->Load(getRomPrefix(), "%nvmem.bin", "nvram");
+		rc = sys_nvmem->Load(std::string("!flycast/")+getRomPrefix(), "%nvmem.bin", "nvram");
 	else if (!settings.naomi.slave)
 	{
 		rc = sys_nvmem->Load(hostfs::getArcadeFlashPath() + ".nvmem");
@@ -272,7 +272,7 @@ void saveFiles()
 	if (settings.naomi.slave || settings.naomi.drivingSimSlave)
 		return;
 	if (settings.platform.isConsole())
-		sys_nvmem->Save(getRomPrefix(), "nvmem.bin", "nvmem");
+		sys_nvmem->Save(std::string("!flycast/")+getRomPrefix(), "nvmem.bin", "nvmem");
 	else
 		sys_nvmem->Save(hostfs::getArcadeFlashPath() + ".nvmem");
 	if (settings.platform.isAtomiswave())
