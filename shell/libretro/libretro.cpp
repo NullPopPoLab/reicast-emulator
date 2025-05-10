@@ -66,7 +66,7 @@
 #include "rend/transform_matrix.h"
 #include "oslib/oslib.h"
 
-#define CUSTOM_VERSION "+NC41"
+#define CUSTOM_VERSION "+NCA41"
 
 constexpr char slash = path_default_slash_c();
 
