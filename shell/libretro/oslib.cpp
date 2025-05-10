@@ -41,12 +41,12 @@ std::string getVmuPath(const std::string& port)
    if ((per_content_vmus == 1 && port == "A1")
 		   || per_content_vmus == 2)
    {
-      sprintf(filename, "%s.%s.bin", content_name, port.c_str());
+      sprintf(filename, "%s/vmu_save_%s.bin", content_name, port.c_str());
       return std::string(vmu_dir_no_slash) + std::string(path_default_slash()) + filename;
    }
    else
    {
-      sprintf(filename, "vmu_save_%s.bin", port.c_str());
+      sprintf(filename, "!flycast/vmu_save_%s.bin", port.c_str());
       return std::string(game_dir_no_slash) + std::string(path_default_slash()) + filename;
    }
 }

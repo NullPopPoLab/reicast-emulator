@@ -2049,12 +2049,15 @@ bool retro_load_game(const struct retro_game_info *game)
 	if (environ_cb(RETRO_ENVIRONMENT_GET_RUMBLE_INTERFACE, &rumble) && log_cb)
 		log_cb(RETRO_LOG_DEBUG, "Rumble interface supported!\n");
 
-	const char *dir = NULL;
-	if (!(environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &dir) && dir))
-		dir = game_dir;
+	const char *data_dir = NULL;
+	if (!(environ_cb(RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY, &data_dir) && data_dir))
+		data_dir = game_dir;
 
-	snprintf(game_dir, sizeof(game_dir), "%s%cdc%c", dir, slash, slash);
-	snprintf(game_dir_no_slash, sizeof(game_dir_no_slash), "%s%cdc", dir, slash);
+	snprintf(game_dir, sizeof(game_dir), "%s%c", data_dir, slash);
+	snprintf(game_dir_no_slash, sizeof(game_dir_no_slash), "%s", data_dir);
+
+	INFO_LOG(COMMON, "game_dir: %s",game_dir);
+	INFO_LOG(COMMON, "game_dir_no_slash: %s",game_dir_no_slash);
 
 	// Per-content VMU additions START
 	// > Get save directory
@@ -2155,7 +2158,7 @@ bool retro_load_game(const struct retro_game_info *game)
 	{
 		char data_dir[1024];
 
-		snprintf(data_dir, sizeof(data_dir), "%s%s", game_dir, "data");
+		snprintf(data_dir, sizeof(data_dir), "%s%s", game_dir, "!flycast");
 
 		INFO_LOG(COMMON, "Creating dir: %s", data_dir);
 		struct stat buf;
@@ -2208,12 +2211,11 @@ bool retro_load_game(const struct retro_game_info *game)
 
 	if (settings.platform.isArcade())
 	{
-		if (environ_cb(RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY, &dir)
-				&& dir != nullptr
-				&& strcmp(dir, g_roms_dir) != 0)
+		if (data_dir != nullptr
+				&& strcmp(data_dir, g_roms_dir) != 0)
 		{
 			static char save_dir[PATH_MAX];
-			snprintf(save_dir, sizeof(save_dir), "%s%creicast%c", dir, slash, slash);
+			snprintf(save_dir, sizeof(save_dir), "%s%c", data_dir, slash);
 
 			struct stat buf;
 			if (stat(save_dir, &buf) < 0)
