@@ -66,6 +66,8 @@
 #include "rend/transform_matrix.h"
 #include "oslib/oslib.h"
 
+#define CUSTOM_VERSION "+NC41"
+
 constexpr char slash = path_default_slash_c();
 
 #define RETRO_DEVICE_TWINSTICK				RETRO_DEVICE_SUBCLASS( RETRO_DEVICE_JOYPAD, 1 )
@@ -2371,7 +2373,7 @@ void retro_get_system_info(struct retro_system_info *info)
 #ifndef GIT_VERSION
 #define GIT_VERSION "undefined"
 #endif
-   info->library_version = GIT_VERSION;
+   info->library_version = GIT_VERSION CUSTOM_VERSION;
    info->valid_extensions = "chd|cdi|elf|cue|gdi|lst|bin|dat|zip|7z|m3u";
    info->need_fullpath = true;
    info->block_extract = true;
