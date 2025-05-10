@@ -1720,12 +1720,12 @@ static void set_input_descriptors()
 				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_UP,    "Stick Up" };
 				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_DOWN,  "Stick Down" };
 				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_RIGHT, "Stick Right" };
-				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_B,     "A" };
-				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_A,     "B" };
-				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_X,     "Y" };
-				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_Y,     "X" };
-				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L,     "C" };
-				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R,     "Z" };
+				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_C,     "A" };
+				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_B,     "B" };
+				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_Y,     "Y" };
+				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_Z,     "X" };
+				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_A,     "C" };
+				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_X,     "Z" };
 				desc[descriptor_index++] = { i, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_START, "Start" };
 				break;
 
@@ -2800,17 +2800,17 @@ static void UpdateInputStateNaomi(u32 port)
 		{
 			//
 			// -- buttons
-			int16_t ret = 0;
+			int32_t ret = 0;
 			if (libretro_supports_bitmasks)
 				ret = input_cb(port, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_MASK);
 			else
 			{
-				for (int id = RETRO_DEVICE_ID_JOYPAD_B; id <= RETRO_DEVICE_ID_JOYPAD_R3; ++id)
+				for (int id = RETRO_DEVICE_ID_JOYPAD_B; id < RETRO_DEVICE_ID_JOYPAD_BUTTON_MAX; ++id)
 					if (input_cb(port, RETRO_DEVICE_JOYPAD, 0, id))
 						ret |= (1 << id);
 			}
 
-			for (int id = RETRO_DEVICE_ID_JOYPAD_B; id <= RETRO_DEVICE_ID_JOYPAD_R3; ++id)
+			for (int id = RETRO_DEVICE_ID_JOYPAD_B; id < RETRO_DEVICE_ID_JOYPAD_BUTTON_MAX; ++id)
 			{
 				switch (id)
 				{
@@ -2933,14 +2933,14 @@ static void UpdateInputStateNaomi(u32 port)
 	}
 }
 
-static int16_t getBitmask(u32 port, int deviceType)
+static int32_t getBitmask(u32 port, int deviceType)
 {
-	int16_t ret = 0;
+	int32_t ret = 0;
 	if (libretro_supports_bitmasks)
 		ret = input_cb(port, deviceType, 0, RETRO_DEVICE_ID_JOYPAD_MASK);
 	else
 	{
-		for (int id = RETRO_DEVICE_ID_JOYPAD_B; id <= RETRO_DEVICE_ID_JOYPAD_R3; ++id)
+		for (int id = RETRO_DEVICE_ID_JOYPAD_B; id < RETRO_DEVICE_ID_JOYPAD_BUTTON_MAX; ++id)
 			if (input_cb(port, deviceType, 0, id))
 				ret |= (1 << id);
 	}
@@ -2977,7 +2977,7 @@ static void UpdateInputState(u32 port)
 	{
 	case MDT_SegaController:
 		{
-			int16_t ret = getBitmask(port, RETRO_DEVICE_JOYPAD);
+			int32_t ret = getBitmask(port, RETRO_DEVICE_JOYPAD);
 
 			// -- buttons
 			for (int id = RETRO_DEVICE_ID_JOYPAD_B; id <= RETRO_DEVICE_ID_JOYPAD_X; ++id)
@@ -3011,7 +3011,7 @@ static void UpdateInputState(u32 port)
 
 	case MDT_AsciiStick:
 		{
-			int16_t ret = getBitmask(port, RETRO_DEVICE_ASCIISTICK);
+			int32_t ret = getBitmask(port, RETRO_DEVICE_ASCIISTICK);
 			kcode[port] = 0xFFFF; // active-low
 
 			// stick
@@ -3021,14 +3021,12 @@ static void UpdateInputState(u32 port)
 			setDeviceButtonStateDirect(ret, port, RETRO_DEVICE_ID_JOYPAD_RIGHT, DC_DPAD_RIGHT );
 
 			// buttons
-			setDeviceButtonStateDirect(ret, port, RETRO_DEVICE_ID_JOYPAD_B, DC_BTN_A );
-			setDeviceButtonStateDirect(ret, port, RETRO_DEVICE_ID_JOYPAD_A, DC_BTN_B );
-			setDeviceButtonStateDirect(ret, port, RETRO_DEVICE_ID_JOYPAD_Y, DC_BTN_X );
-			setDeviceButtonStateDirect(ret, port, RETRO_DEVICE_ID_JOYPAD_X, DC_BTN_Y );
-			setDeviceButtonStateDirect2(ret, port, RETRO_DEVICE_ID_JOYPAD_L, 
-			                                       RETRO_DEVICE_ID_JOYPAD_L2, DC_BTN_Z );
-			setDeviceButtonStateDirect2(ret, port, RETRO_DEVICE_ID_JOYPAD_R, 
-			                                       RETRO_DEVICE_ID_JOYPAD_R2, DC_BTN_C );
+			setDeviceButtonStateDirect(ret, port, RETRO_DEVICE_ID_JOYPAD_C, DC_BTN_A );
+			setDeviceButtonStateDirect(ret, port, RETRO_DEVICE_ID_JOYPAD_B, DC_BTN_B );
+			setDeviceButtonStateDirect(ret, port, RETRO_DEVICE_ID_JOYPAD_Z, DC_BTN_X );
+			setDeviceButtonStateDirect(ret, port, RETRO_DEVICE_ID_JOYPAD_Y, DC_BTN_Y );
+			setDeviceButtonStateDirect(ret, port, RETRO_DEVICE_ID_JOYPAD_A, DC_BTN_Z );
+			setDeviceButtonStateDirect(ret, port, RETRO_DEVICE_ID_JOYPAD_X, DC_BTN_C );
 			setDeviceButtonStateDirect(ret, port, RETRO_DEVICE_ID_JOYPAD_START, DC_BTN_START );
 
 			// unused inputs
@@ -3041,7 +3039,7 @@ static void UpdateInputState(u32 port)
 
 	case MDT_TwinStick:
 		{
-			int16_t ret = 0;
+			int32_t ret = 0;
 			kcode[port] = 0xFFFF; // active-low
 			
 			if ( device_type[port] == RETRO_DEVICE_TWINSTICK_SATURN )
@@ -3234,7 +3232,7 @@ static void UpdateInputState(u32 port)
 
 	case MDT_MaracasController:
 		{
-			int16_t ret = getBitmask(port, RETRO_DEVICE_MARACAS);
+			int32_t ret = getBitmask(port, RETRO_DEVICE_MARACAS);
 			kcode[port] = 0xFFFF; // active-low
 
 			// buttons
@@ -3261,7 +3259,7 @@ static void UpdateInputState(u32 port)
 
 	case MDT_FishingController:
 		{
-			int16_t ret = getBitmask(port, RETRO_DEVICE_FISHING);
+			int32_t ret = getBitmask(port, RETRO_DEVICE_FISHING);
 			kcode[port] = 0xFFFF; // active-low
 
 			// buttons
@@ -3282,7 +3280,7 @@ static void UpdateInputState(u32 port)
 
 	case MDT_PopnMusicController:
 		{
-			int16_t ret = getBitmask(port, RETRO_DEVICE_POPNMUSIC);
+			int32_t ret = getBitmask(port, RETRO_DEVICE_POPNMUSIC);
 			kcode[port] = 0xFFFF; // active-low
 
 			// buttons
@@ -3307,7 +3305,7 @@ static void UpdateInputState(u32 port)
 
 	case MDT_RacingController:
 		{
-			int16_t ret = getBitmask(port, RETRO_DEVICE_RACING);
+			int32_t ret = getBitmask(port, RETRO_DEVICE_RACING);
 			kcode[port] = 0xFFFF; // active-low
 
 			// buttons
